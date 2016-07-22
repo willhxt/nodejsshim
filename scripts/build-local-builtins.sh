@@ -21,17 +21,6 @@
 # bundle may include several builtin packages and be larger than necessary.
 #
 # @See: https://github.com/substack/node-browserify
-VERSION=$(awk '/version *=/ { split($$0, ary, "[\"= ]*");       \
-                              for (i in ary) {                  \
-                                if (ary[i] == "version") {      \
-                                  print ary[i + 1] ; exit;      \
-                                } } }' $DIR/../database/source/package.xml)
-SCHEMANAME=$(awk '/name *=/ { split($$0, ary, "[\"= ]*");       \
-                              for (i in ary) {                  \
-                                if (ary[i] == "name") {         \
-                                  print ary[i + 1] ; exit;      \
-                                } } }' $DIR/../database/source/package.xml)
-URL="https://github.com/xtuple/qt-script-node-js-shims"
 
 build_buffer_qt () {
   # Note: This is a wrapper around QByteArray. There is also a Buffer shim in
@@ -148,6 +137,18 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Import helper script.
 source $DIR/lib/helpers.sh
+
+VERSION=$(awk '/version *=/ { split($$0, ary, "[\"= ]*");       \
+                              for (i in ary) {                  \
+                                if (ary[i] == "version") {      \
+                                  print ary[i + 1] ; exit;      \
+                                } } }' $DIR/../database/source/package.xml)
+SCHEMANAME=$(awk '/name *=/ { split($$0, ary, "[\"= ]*");       \
+                              for (i in ary) {                  \
+                                if (ary[i] == "name") {         \
+                                  print ary[i + 1] ; exit;      \
+                                } } }' $DIR/../database/source/package.xml)
+URL="https://github.com/xtuple/qt-script-node-js-shims"
 
 # Build all local builtins.
 echo "############################"
