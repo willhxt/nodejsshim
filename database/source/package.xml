@@ -1,0 +1,65 @@
+<package id="source"
+         name="nodejsshim"
+         developer="xTuple ERP"
+         descrip="xTuple ERP Node.js shims for the Qt Script Engine."
+         version="1.0.0-beta"
+         updater="2.4.0-beta">
+  <pkgnotes>This package creates the required database tables and functions for xTuple Node.js shims. </pkgnotes>
+
+  <prerequisite type="license">
+    <message>This file is part of the xTuple Node.js Shims Package for xTuple ERP, and is Copyright (c) 1999-2016 by OpenMFG LLC, d/b/a xTuple.  It is licensed to you under the xTuple End-User License Agreement ("the EULA"), the full text of which is available at www.xtuple.com/EULA.  While the EULA gives you access to source code and encourages your involvement in the development process, this Package is not free software.  By using this software, you agree to be bound by the terms of the EULA.</message>
+  </prerequisite>
+
+  <prerequisite type="Query" name="Checking for db version">
+    <query>SELECT fetchMetricText('ServerVersion') > '4.10';
+    </query>
+    <message>This version of xTuple Node.js Shims Package is compatible with xTuple ERP 4.10.x and later.</message>
+  </prerequisite>
+
+  <script file="nodejsshim/tables/node_modules.sql" name="node_modules" />
+
+  <createfunction file="nodejsshim/functions/npm_install.sql" name="npm_install" />
+
+  <loadappscript file="nodejsshim/tables/pkgscript/core-js.js" name="core-js">Core JS Polyfill</loadappscript>
+  <loadappscript file="nodejsshim/tables/pkgscript/initMenu.js" name="initMenu">Node.js initMenu</loadappscript>
+  <loadappscript file="nodejsshim/tables/pkgscript/nodejsshim.js" name="nodejsshim">Node.js Shim</loadappscript>
+  <loadappscript file="nodejsshim/tables/pkgscript/nodeJsConsole.js" name="nodeJsConsole">Node.js Shim Console Debugging</loadappscript>
+  <loadappscript file="nodejsshim/tables/pkgscript/require.js" name="require">Node.js require shim</loadappscript>
+
+  <loadappui file="nodejsshim/tables/pkguiform/nodeJsConsole.ui">Node.js Shim Console Debugging</loadappui>
+
+  <comment>Local builtins</comment>
+  <finalscript file="nodejsshim/src/buffer-qtscript/dist/buffer.qtscript.sql" name="buffer-qt" />
+  <finalscript file="nodejsshim/src/child_process-qtscript/dist/child_process.qtscript.sql" name="child_process" />
+  <finalscript file="nodejsshim/src/crypto-qtscript/dist/crypto.qtscript.sql" name="crypto" />
+  <finalscript file="nodejsshim/src/dns-qtscript/dist/dns.qtscript.sql" name="dns" />
+  <finalscript file="nodejsshim/src/fs-qtscript/dist/fs.qtscript.sql" name="fs" />
+  <finalscript file="nodejsshim/src/http-qtscript/dist/http.qtscript.sql" name="http" />
+  <finalscript file="nodejsshim/src/https-qtscript/dist/https.qtscript.sql" name="https" />
+  <finalscript file="nodejsshim/src/net-qtscript/dist/net.qtscript.sql" name="net" />
+  <finalscript file="nodejsshim/src/_stream_transform-qtscript/dist/_stream_transform.qtscript.sql" name="_stream_transform" />
+  <finalscript file="nodejsshim/src/timers-qtscript/dist/timers.qtscript.sql" name="timers" />
+  <finalscript file="nodejsshim/src/ws-qtscript/dist/ws.qtscript.sql" name="ws" />
+
+  <comment>External builtins</comment>
+  <finalscript file="nodejsshim/lib/assert/dist/assert.sql" name="assert" />
+  <finalscript file="nodejsshim/lib/buffer/dist/buffer.sql" name="buffer" />
+  <finalscript file="nodejsshim/lib/buffer-browserify/dist/buffer-browserify.sql" name="buffer-browserify" />
+  <finalscript file="nodejsshim/lib/events/dist/events.sql" name="events" />
+  <finalscript file="nodejsshim/lib/path/dist/path.sql" name="path" />
+  <finalscript file="nodejsshim/lib/process/dist/process.sql" name="process" />
+  <finalscript file="nodejsshim/lib/punycode/dist/punycode.sql" name="punycode" />
+  <finalscript file="nodejsshim/lib/querystring/dist/querystring.sql" name="querystring" />
+  <finalscript file="nodejsshim/lib/stream/dist/stream.sql" name="stream" />
+  <finalscript file="nodejsshim/lib/string_decoder/dist/string_decoder.sql" name="string_decoder" />
+  <finalscript file="nodejsshim/lib/url/dist/url.sql" name="url" />
+  <finalscript file="nodejsshim/lib/util/dist/util.sql" name="util" />
+
+  <comment>Npm dependencies</comment>
+  <finalscript file="nodejsshim/node_modules/bluebird/dist/bluebird.sql" name="bluebird" />
+  <finalscript file="nodejsshim/node_modules/json-mapper/dist/json-mapper.sql" name="json-mapper" />
+  <finalscript file="nodejsshim/node_modules/lodash/dist/lodash.sql" name="lodash" />
+  <finalscript file="nodejsshim/node_modules/sax/dist/sax.sql" name="sax" />
+  <finalscript file="nodejsshim/node_modules/xmlbuilder/dist/xmlbuilder.sql" name="xmlbuilder" />
+
+</package>

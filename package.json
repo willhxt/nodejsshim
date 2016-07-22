@@ -1,0 +1,57 @@
+{
+  "name": "qt-script-node-js-shims",
+  "version": "1.0.0-beta",
+  "description": "xTuple ERP Node.js shims for the Qt Script Engine.",
+  "main": "database/source/nodejsshim/tables/pkgscript/nodejsshim.js",
+  "loadOrder": 10,
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "build-external-builtins": "./scripts/build-external-builtins.sh",
+    "build-local-builtins": "./scripts/build-local-builtins.sh",
+    "build-npm-dependencies": "./scripts/build-npm-dependencies.sh",
+    "build-release-package": "./scripts/build-release-package.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xtuple/qt-script-node-js-shims.git"
+  },
+  "keywords": [
+    "xTuple",
+    "ERP",
+    "Qt",
+    "Script",
+    "Node"
+  ],
+  "author": {
+    "name": "bendiy",
+    "email": "ben@xtuple.com",
+    "url": "http://www.xtuple.com/"
+  },
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/xtuple/qt-script-node-js-shims/issues"
+  },
+  "homepage": "https://github.com/xtuple/qt-script-node-js-shims",
+  "dependencies": {
+    "assert": "^1.3.0",
+    "bluebird": "^3.4.0",
+    "buffer": "^4.6.0",
+    "buffer-browserify": "^0.2.5",
+    "core-js": "^2.3.0",
+    "events": "^1.1.0",
+    "http-parser-js": "^0.4.2",
+    "json-mapper": "^0.0.10",
+    "lodash": "^4.11.2",
+    "path": "^0.12.7",
+    "process": "^0.11.2",
+    "punycode": "^1.4.1",
+    "querystring-es3": "^0.2.1",
+    "sax": "^1.2.1",
+    "stream-browserify": "^2.0.1",
+    "string_decoder": "^0.10.31",
+    "url": "^0.11.0",
+    "util": "^0.10.3",
+    "xmlbuilder": "^8.2.2"
+  }
+}
