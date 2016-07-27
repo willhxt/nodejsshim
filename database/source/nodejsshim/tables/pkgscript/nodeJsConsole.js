@@ -9,6 +9,43 @@
 
 include('nodejsshim');
 
+var _exampleList = mywindow.findChild("_exampleList");
+var _consoleLog = mywindow.findChild("_consoleLog");
+var _commandLine = mywindow.findChild("_commandLine");
+var _commandButton = mywindow.findChild("_commandButton");
+
+_exampleList.append(0, "Select and example...");
+_exampleList.append(1, "HTTP GET Request");
+_exampleList.append(2, "HTTP Request");
+_exampleList.append(3, "HTTP Server");
+_exampleList.append(4, "Promise");
+_exampleList.append(5, "TCP Server");
+_exampleList.append(6, "WebSocket Server");
+_exampleList.append(7, "XT.dataSource.Query()");
+
+/*
+ * Map the _exampleList selection to an example.
+ */
+function handleExampleListChange (index) {
+  var examples = [
+    function listPlaceholder(){},
+    exampleHttpGet,
+    exampleHttpRequest,
+    exampleHttpServer,
+    examplePromise,
+    exampleTcpServer,
+    function exampleWebSocketServer(){
+      _consoleLog.plainText = _consoleLog.plainText + '\nTODO: Add WebSocketServer chat example.';
+    },
+    exampleXTdataSourceQuery
+  ];
+
+  if (index > 0) {
+    _exampleList.setEnabled(false);
+    examples[index]();
+  }
+}
+
 /*
  * Some example code that users the Node.js Shim.
  */
@@ -23,14 +60,13 @@ function exampleHttpGet () {
   startQueryTimer = new Date().getTime();
   var req = http.get(options, function (res) {
     res.on('data', function (chunk) {
-      console.log("STATUS: ", res.statusCode);
-      console.log("STATUS MESSAGE: ", res.statusMessage);
-      //console.log("HEADERS: ", JSON.stringify(res.headers));
-      //console.log("BODY: ", chunk);
+      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS: ' + res.statusCode;
+      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS MESSAGE: ' + res.statusMessage;
+      _consoleLog.plainText = _consoleLog.plainText + '\nBODY: ' + chunk;
     });
     res.on('end', function () {
-      console.log('No more data in response.');
-      console.log('Execution time: ' + ((new Date().getTime()) - startQueryTimer));
+      _consoleLog.plainText = _consoleLog.plainText + '\nNo more data in response.';
+      _consoleLog.plainText = _consoleLog.plainText + '\nExecution time: ' + ((new Date().getTime()) - startQueryTimer);
     })
   });
 }
@@ -49,14 +85,13 @@ function exampleHttpRequest () {
   startQueryTimer = new Date().getTime();
   var req = http.request(options, function (res) {
     res.on('data', function (chunk) {
-      console.log("STATUS: ", res.statusCode);
-      console.log("STATUS MESSAGE: ", res.statusMessage);
-      //console.log("HEADERS: ", JSON.stringify(res.headers));
-      //console.log("BODY: ", chunk);
+      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS: ' + res.statusCode;
+      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS MESSAGE: ' + res.statusMessage;
+      _consoleLog.plainText = _consoleLog.plainText + '\nBODY: ' + chunk;
     });
     res.on('end', function () {
-      console.log('No more data in response.');
-      console.log('Execution time: ' + ((new Date().getTime()) - startQueryTimer));
+      _consoleLog.plainText = _consoleLog.plainText + '\nNo more data in response.';
+      _consoleLog.plainText = _consoleLog.plainText + '\nExecution time: ' + ((new Date().getTime()) - startQueryTimer);
     })
   });
 
@@ -74,11 +109,24 @@ function exampleTcpServer () {
     host: '127.0.0.1'
   };
   var server = net.createServer(function (clientSocket) {
+    _consoleLog.plainText = _consoleLog.plainText + '\nWriting "Hello World!" to clientSocket';
     clientSocket.end("hello world!");
   });
 
   server.listen(options, function () {
-    console.log('QTcpServer listening on ' + options.host + '::' + options.port);
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server listening on ' + options.host + '::' + options.port;
+
+    // TODO: This isn't working yet.
+    // https://gist.github.com/tedmiston/5935757#file-nodejs-tcp-example-js-L36
+    var client = new net.Socket({});
+
+    client.connect({
+      host: options.host,
+      port: options.port
+    }, function connectListener() {
+      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connected.';
+      //client.destroy();
+    });
   });
 }
 
@@ -93,6 +141,8 @@ function exampleHttpServer () {
     host: '127.0.0.1'
   };
   var server = http.createServer(function (req, res) {
+    _consoleLog.plainText = _consoleLog.plainText + '\n' + req.headers.host + ' - [' + (new Date().toISOString()) + '] "' + req.method + ' ' + req.url + '"';
+
     if (req.url === '/') {
       var html = '<html><head><title>xTuple exampleHttpServer</title></head><body><h1>It Works!</h1></body></html>';
       res.writeHead(200, {'Content-Type': 'text/html'});
@@ -128,9 +178,9 @@ function exampleXTdataSourceQuery () {
 
   function callback (queryError, result) {
     if (queryError) {
-      console.error(queryError.message);
+      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + queryError.message;
     } else {
-      console.log(JSON.stringify(result));
+      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Result: ' + JSON.stringify(result);
     }
   }
 
@@ -177,23 +227,18 @@ function examplePromise () {
   // You can also use `caught` when using the Bluebird library for Promise. e.g.
   //   `myPromise.then(...).caught(...);`
   doSomething().then(function (firstResult) {
-    console.log("first result:", firstResult);
+    _consoleLog.plainText = _consoleLog.plainText + '\nFirst result: ' + firstResult;
     return doSomethingElse(firstResult);
   }).then(function (secondResult) {
-    console.log("second result:", secondResult);
+    _consoleLog.plainText = _consoleLog.plainText + '\nSecond result: ' + secondResult;
     return secondResult;
   }).then(function (thirdResult) {
-    console.log("third result passed message: ", thirdResult);
+    _consoleLog.plainText = _consoleLog.plainText + '\nThird result passed message: ' + thirdResult;
     var message = "Did something that errors. message = " + thirdResult;
     throw new Error(message);
-  })["catch"](console.log.bind(console));
+  })["catch"](function (err) {
+    _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + err.message;
+  });
 }
 
-//var wrapper = exampleHttpGet;
-//var wrapper = exampleHttpRequest;
-//var wrapper = exampleTcpServer;
-var wrapper = exampleHttpServer;
-//var wrapper = exampleXTdataSourceQuery;
-//var wrapper = examplePromise;
-
-wrapper();
+_exampleList["currentIndexChanged(int)"].connect(handleExampleListChange);
