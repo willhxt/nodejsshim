@@ -109,8 +109,9 @@ function exampleTcpServer () {
     host: '127.0.0.1'
   };
   var server = net.createServer(function (clientSocket) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nWriting "Hello World!" to clientSocket';
-    clientSocket.end("hello world!");
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server received new TCP Socket Client connection.';
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server writing "Hello World!" to TCP Socket Client';
+    clientSocket.end("Hello World!");
   });
 
   server.listen(options, function () {
@@ -118,14 +119,24 @@ function exampleTcpServer () {
 
     // TODO: This isn't working yet.
     // https://gist.github.com/tedmiston/5935757#file-nodejs-tcp-example-js-L36
-    var client = new net.Socket({});
+    var client = new net.Socket();
 
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connecting to TCP Socket Server.';
     client.connect({
       host: options.host,
       port: options.port
     }, function connectListener() {
       _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connected.';
-      //client.destroy();
+    });
+
+    client.on('data', function(data) {
+      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client received data: ' + data;
+      // Kill client after server's response.
+      client.destroy();
+    });
+
+    client.on('close', function() {
+      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client closed connection.';
     });
   });
 }
