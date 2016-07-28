@@ -18,7 +18,7 @@ to be bound by its terms.</comment>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Node.js Shim Console Debugging</string>
+   <string>Node.js Shim Examples</string>
   </property>
   <layout class="QGridLayout" name="_layout">
    <item row="1" column="0">
