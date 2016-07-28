@@ -34,9 +34,7 @@ function handleExampleListChange (index) {
     exampleHttpServer,
     examplePromise,
     exampleTcpServer,
-    function exampleWebSocketServer(){
-      _consoleLog.plainText = _consoleLog.plainText + '\nTODO: Add WebSocketServer chat example.';
-    },
+    exampleWebSocketServer,
     exampleXTdataSourceQuery
   ];
 
@@ -99,49 +97,6 @@ function exampleHttpRequest () {
 }
 
 /*
- * Test QTcpServer
- */
-function exampleTcpServer () {
-  var net = require('net');
-
-  var options = {
-    port: 1234,
-    host: '127.0.0.1'
-  };
-  var server = net.createServer(function (clientSocket) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server received new TCP Socket Client connection.';
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server writing "Hello World!" to TCP Socket Client';
-    clientSocket.end("Hello World!");
-  });
-
-  server.listen(options, function () {
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server listening on ' + options.host + '::' + options.port;
-
-    // TODO: This isn't working yet.
-    // https://gist.github.com/tedmiston/5935757#file-nodejs-tcp-example-js-L36
-    var client = new net.Socket();
-
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connecting to TCP Socket Server.';
-    client.connect({
-      host: options.host,
-      port: options.port
-    }, function connectListener() {
-      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connected.';
-    });
-
-    client.on('data', function(data) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client received data: ' + data;
-      // Kill client after server's response.
-      client.destroy();
-    });
-
-    client.on('close', function() {
-      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client closed connection.';
-    });
-  });
-}
-
-/*
  * Test http.Server
  */
 function exampleHttpServer () {
@@ -175,34 +130,6 @@ function exampleHttpServer () {
     setTimeout(function () {
       toolbox.openUrl('http://' + options.host + ':' + options.port + '/');
     }, 50);
-  });
-}
-
-/*
- * Test XT.dataSource.query
- */
-function exampleXTdataSourceQuery () {
-  var sql = "SELECT cust_id FROM custinfo WHERE cust_number = $1;";
-  var options = {
-    parameters: ["TTOYS"]
-  };
-
-  function callback (queryError, result) {
-    if (queryError) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + queryError.message;
-    } else {
-      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Result: ' + JSON.stringify(result);
-    }
-  }
-
-  XT.dataSource.query(sql, options, function (queryError, result) {
-    if (callback) {
-      if (!queryError) {
-        callback(null, result);
-      } else {
-        callback(queryError, result);
-      }
-    }
   });
 }
 
@@ -249,6 +176,140 @@ function examplePromise () {
     throw new Error(message);
   })["catch"](function (err) {
     _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + err.message;
+  });
+}
+
+/*
+ * Test QTcpServer
+ */
+function exampleTcpServer () {
+  var net = require('net');
+
+  var options = {
+    port: 1234,
+    host: '127.0.0.1'
+  };
+  var server = net.createServer(function (clientSocket) {
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server received new TCP Socket Client connection.';
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server writing "Hello World!" to TCP Socket Client';
+    clientSocket.end("Hello World!");
+  });
+
+  server.listen(options, function () {
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server listening on ' + options.host + '::' + options.port;
+
+    var client = new net.Socket();
+
+    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connecting to TCP Socket Server.';
+    client.connect({
+      host: options.host,
+      port: options.port
+    }, function connectListener() {
+      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connected.';
+    });
+
+    client.on('data', function(data) {
+      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client received data: ' + data;
+      // Kill client after server's response.
+      client.destroy();
+    });
+
+    client.on('close', function() {
+      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client closed connection.';
+    });
+  });
+}
+
+/*
+ * Test WebSocket Server
+ */
+function exampleWebSocketServer(){
+  var WebSocketServer = require("ws").Server;
+
+  var options = {
+    host: '127.0.0.1',
+    port: 1234
+  };
+  var wsServer = new WebSocketServer(options);
+
+  wsServer.on('connection', function handleWSClientConnection (socket) {
+    _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket received client connection. Sending message to client: ping';
+    socket.send('ping', function handelSocketSendError(error) {
+      if (error) {
+        _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket.send callback error:' + JSON.stringify(error);
+      }
+    });
+
+    socket.on('error', function (error) {
+      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket error: ' + JSON.stringify(error);
+    });
+
+    socket.on('message', function handleSocketMessage(message) {
+      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket received message: ' + message;
+    });
+
+    socket.on('close', function HandelSocketClose() {
+      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server Client closed WebSocket connection.';
+    });
+  });
+
+  wsServer.on('error', function handleWSServerError (error) {
+    _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server Error: ' + JSON.stringify(error);
+  });
+
+  wsServer.on('listening', function handleWSServerListening () {
+    _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server listening on ws://' + options.host + '::' + options.port;
+    _commandLine.setEnabled(true);
+    _commandButton.setEnabled(true);
+
+    /*
+     * Test WebSocket Client
+     */
+    var WebSocketClient = require("ws");
+    var wsClient = new WebSocketClient('ws://127.0.0.1:1234');
+
+    function wsClientSendMessage() {
+      wsClient.send(_commandLine.text);
+      _commandLine.text = '';
+    }
+    _commandButton.clicked.connect(wsClientSendMessage);
+
+    wsClient.on('open', function open() {
+      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Client connected to server. Sending message to server: pong';
+      wsClient.send('pong');
+    });
+
+    wsClient.on('message', function(data, flags) {
+      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Client received message: ' + data;
+    });
+  });
+}
+
+/*
+ * Test XT.dataSource.query
+ */
+function exampleXTdataSourceQuery () {
+  var sql = "SELECT cust_id FROM custinfo WHERE cust_number = $1;";
+  var options = {
+    parameters: ["TTOYS"]
+  };
+
+  function callback (queryError, result) {
+    if (queryError) {
+      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + queryError.message;
+    } else {
+      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Result: ' + JSON.stringify(result);
+    }
+  }
+
+  XT.dataSource.query(sql, options, function (queryError, result) {
+    if (callback) {
+      if (!queryError) {
+        callback(null, result);
+      } else {
+        callback(queryError, result);
+      }
+    }
   });
 }
 

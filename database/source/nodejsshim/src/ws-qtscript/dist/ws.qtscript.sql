@@ -143,6 +143,14 @@ var WebSocket = function webSocketConstructor (address, protocols, options) {
     self.emit('close', false);
   }
   function _isError (socketError) {
+    if (socketError === 1) {
+      // This is just `QAbstractSocket::RemoteHostClosedError`, so ignore it.
+      // The remote host closed the connection. Note that the client socket
+      // (i.e., this socket) will be closed after the remote close notification
+      // has been sent.
+      // @See: https://doc.qt.io/qt-5/qabstractsocket.html#SocketError-enum
+      return;
+    }
     if (socketError === 5) {
       return;
     }
