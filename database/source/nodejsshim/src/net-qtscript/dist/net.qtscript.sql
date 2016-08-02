@@ -359,9 +359,15 @@ var Socket = function socketConstructor (options) {
     readable: false,
     writable: false
   };
+
+  if (typeof options === 'number') {
+    options = { fd: options }; // Legacy interface.
+  } else if (options === undefined) {
+    options = {};
+  }
+
   this._options = Object.assign(this._options, options);
 
-  this._connecting = false;
   this._hadError = false;
   this._handle = null;
   this._parent = null;
@@ -434,6 +440,14 @@ debugger;
     self.emit('close', false);
   }
   function _isError (socketError) {
+    if (socketError === 1) {
+      // This is just `QAbstractSocket::RemoteHostClosedError`, so ignore it.
+      // The remote host closed the connection. Note that the client socket
+      // (i.e., this socket) will be closed after the remote close notification
+      // has been sent.
+      // @See: https://doc.qt.io/qt-5/qabstractsocket.html#SocketError-enum
+      return;
+    }
     if (socketError === 5) {
       // TODO: `while (self.QTcpSocket.waitForReadyRead(200))` below throws signals error.
       // This probably happens if `waitForReadyRead()` calls `QTcpSocket.error()` to check for errors.
@@ -515,6 +529,29 @@ Socket.prototype.address = function address () {
   };
 };
 
+// Returns an array [options] or [options, cb]
+// It is the same as the argument of Socket.prototype.connect().
+function normalizeConnectArgs(args) {
+  var options = {};
+
+  if (args[0] !== null && typeof args[0] === 'object') {
+    // connect(options, [cb])
+    options = args[0];
+  } else if (isPipeName(args[0])) {
+    // connect(path, [cb]);
+    options.path = args[0];
+  } else {
+    // connect(port, [host], [cb])
+    options.port = args[0];
+    if (typeof args[1] === 'string') {
+      options.host = args[1];
+    }
+  }
+
+  var cb = args[args.length - 1];
+  return typeof cb === 'function' ? [options, cb] : [options];
+}
+
 /**
  * Emulate Node.js's `socket.connect(options[, connectListener])`,
  * `socket.connect(port[, host][, connectListener])`,
@@ -527,49 +564,37 @@ Socket.prototype.address = function address () {
  * @param {String | Function} [host] - The connections's host|connectionListener.
  * @param {Function} [connectListener] - The connections's connectionListener.
  */
-Socket.prototype.connect = function connect (port, host, connectListener) {
+Socket.prototype.connect = function connect (options, connectListener) {
   var self = this;
+
+  if (options === null || typeof options !== 'object') {
+    // Old API:
+    // connect(port, [host], [cb])
+    // connect(path, [cb]);
+    var argsLen = arguments.length;
+    var args = new Array(argsLen);
+    for (var i = 0; i < argsLen; i++) {
+      args[i] = arguments[i];
+    }
+    args = normalizeConnectArgs(args);
+    return Socket.prototype.connect.apply(this, args);
+  }
+
   var dns = require('dns');
-  var options = (typeof port === 'object') ? port : false;
-  var listener = (typeof host === 'function') ? host : connectListener;
-  var path = (port !== parseInt(port, 10)) ? port : false;
-
-  // If host is omitted, 'localhost' will be assumed when using port.
-  host = (!host && !options && !path) ? 'localhost' : host;
-
-  if (!options) {
-    options = {};
-    if (port && !path) {
-      options.port = port;
-    }
-    if (host && !path) {
-      options.host = host;
-    }
-    if (path) {
-      options.path = path;
-    }
-  }
-
-  /*
-  var pipe = !!options.path;
-  //debug('pipe', pipe, options.path);
-
-  if (!this._handle) {
-    this._handle = pipe ? new Pipe() : new TCP();
-    initSocketHandle(this);
-  }
-  */
-
   var dnsopts = {
     family: options.family || 4,
     hints: 0
   };
-  self._host = host;
+  self._host = options.host;
   var lookup = options.lookup || dns.lookup;
-  lookup(host, dnsopts, function(err, ip, addressType) {
+
+  this._connecting = true;
+  this.writable = true;
+
+  lookup(options.host, dnsopts, function(err, ip, addressType) {
     self.remoteAddress = ip;
     self.remoteFamily = addressType;
-    self.remotePort = port;
+    self.remotePort = options.port;
 
     self.emit('lookup', err, ip, addressType);
 
@@ -591,12 +616,11 @@ Socket.prototype.connect = function connect (port, host, connectListener) {
         self._destroy();
       }, self, err);
     } else {
-      if (typeof listener === 'function') {
-        this.on('connect', listener);
+      if (typeof connectListener === 'function') {
+        self.on('connect', connectListener);
       }
-      this._connecting = true;
 
-      this.QTcpSocket.connectToHost(options.host, options.port);
+      self.QTcpSocket.connectToHost(options.host, options.port);
     }
   });
 };

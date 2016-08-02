@@ -27,11 +27,9 @@ cd xtuple
 
 ## Usage
 After installation, a new package, `nodejsshim`, will exist in your xTuple
-database. A simple `http.request` test is provided at:
-  * `System > Design > Node.js Shim > Console Debugging`
-
-Open up the `Database Log` at `System > View Database Log...` and then run the
-`Console Debugging` above. The HTTP status code and request time will be output.
+database. Some example usage tests are provided at:
+  * `System > Design > Node.js Shim > Examples...`
+Your user must have the `MaintainScripts` privilege to run them.
 
 To use the Node.js shim in other Qt Script code, just include this at the top
 of your script file:

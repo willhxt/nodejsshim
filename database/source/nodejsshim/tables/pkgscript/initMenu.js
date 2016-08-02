@@ -21,16 +21,18 @@ function sNodeJsConsole() {
  * `nodeJsConsole` script and screen.
  */
 try {
-  var menuDesign = mainwindow.findChild("menu.sys.design");
-  menuDesign.addSeparator();
+  if (privileges.value("MaintainScripts")) {
+    var menuDesign = mainwindow.findChild("menu.sys.design");
+    menuDesign.addSeparator();
 
-  var menuNodeJs = new QMenu(qsTranslate("menuDesign", "Node.js Shim"), mainwindow);
-  menuNodeJs.objectName = "menu.sys.design.nodejs";
-  menuDesign.addMenu(menuNodeJs);
+    var menuNodeJs = new QMenu(qsTranslate("menuDesign", "Node.js Shim"), mainwindow);
+    menuNodeJs.objectName = "menu.sys.design.nodejs";
+    menuDesign.addMenu(menuNodeJs);
 
-  var nodeJsConsoleAction = menuNodeJs.addAction(qsTranslate("menuNodeJs", "Console Debugging"));
-  nodeJsConsoleAction.objectName = "nodejs.nodeJsConsole";
-  nodeJsConsoleAction.triggered.connect(sNodeJsConsole);
+    var nodeJsConsoleAction = menuNodeJs.addAction(qsTranslate("menuNodeJs", "Examples..."));
+    nodeJsConsoleAction.objectName = "nodejs.nodeJsConsole";
+    nodeJsConsoleAction.triggered.connect(sNodeJsConsole);
+  }
 } catch (e) {
   print("initMenu::nodejsshim exception @ " + e.lineNumber + ": " + e);
 }
