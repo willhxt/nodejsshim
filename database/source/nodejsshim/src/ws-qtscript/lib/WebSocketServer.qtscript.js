@@ -358,14 +358,22 @@ WebSocketServer.prototype.listen = function listen () {
   }
 
   function listenAfterLookup(port, address, backlog, exclusive) {
-    require('dns').lookup(address, function(err, ip, addressType) {
-      if (err) {
-        self.emit('error', err);
-      } else {
-        addressType = ip ? addressType : 4;
-        _listen(self, ip, port, addressType, backlog, undefined, exclusive);
-      }
-    });
+    if (address === 'localhost') {
+      _listen(self, '127.0.0.1', port, 4, backlog, undefined, exclusive);
+    } else if (address === '::1') {
+      _listen(self, address, port, 6, backlog, undefined, exclusive);
+    } else if (address === '127.0.0.1') {
+      _listen(self, address, port, 4, backlog, undefined, exclusive);
+    } else {
+      require('dns').lookup(address, function(err, ip, addressType) {
+        if (err) {
+          self.emit('error', err);
+        } else {
+          addressType = ip ? addressType : 4;
+          _listen(self, ip, port, addressType, backlog, undefined, exclusive);
+        }
+      });
+    }
   }
 
   return self;
