@@ -1,5 +1,4 @@
-# qt-script-node-js-shims
-xTuple ERP Node.js Shims for Qt Script
+# nodejsshim -  Node.js Shims for Qt Script in xTuple ERP
 
 This repo contains javascript code to emulate a Node.js environment in Qt Script.
 To do this, Node.js globals and builtins are recreated by wrapping Qt objects.
