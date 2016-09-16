@@ -26,7 +26,7 @@ DO $$
   if (select.length && select.length === 1) {
     plv8.execute(updateSql, [
       "xTuple ERP Node.js shims for the Qt Script Engine.",
-      "1.0.0-beta.2",
+      "1.0.0-rc",
       "xTuple",
       "This package creates the required database tables and functions for xTuple ERP Node.js shims for the Qt Script Engine."
     ]);
@@ -34,7 +34,7 @@ DO $$
     plv8.execute(insertSql, [
       "nodejsshim",
       "xTuple ERP Node.js shims for the Qt Script Engine.",
-      "1.0.0-beta.2",
+      "1.0.0-rc",
       "xTuple",
       "This package creates the required database tables and functions for xTuple ERP Node.js shims for the Qt Script Engine."
     ]);
