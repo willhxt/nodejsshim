@@ -1,6 +1,6 @@
 {
   "name": "qt-script-node-js-shims",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-rc",
   "description": "xTuple ERP Node.js shims for the Qt Script Engine.",
   "main": "database/source/nodejsshim/tables/pkgscript/nodejsshim.js",
   "loadOrder": 10,
