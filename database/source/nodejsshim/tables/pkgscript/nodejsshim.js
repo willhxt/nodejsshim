@@ -221,8 +221,22 @@ XT.dataSource.query = function (query, queryOptions, queryCallback) {
     query = query.replace(placeholderRegex, "?");
     sqlQuery.prepare(query);
 
+    if (sqlQuery.lastError().type() !== 0) {
+      var message = "Cannot QSqlQuery.prepare() query:\n" + query + "\n" + sqlQuery.lastError().text();
+      console.error(message);
+      queryCallback(new Error(message), null);
+      return;
+    }
+
     options.parameters.forEach(function (element, index) {
       sqlQuery.bindValue(index, element);
+
+      if (sqlQuery.lastError().type() !== 0) {
+        var message = "Cannot QSqlQuery.bindValue() for query:\n" + query + "\n" + sqlQuery.lastError().text();
+        console.error(message);
+        queryCallback(new Error(sqlQuery.lastError().text()), null);
+        return;
+      }
     });
 
     sqlQuery.exec();
@@ -231,6 +245,8 @@ XT.dataSource.query = function (query, queryOptions, queryCallback) {
   }
 
   if (sqlQuery.lastError().type() !== 0) {
+    var message = "Cannot QSqlQuery.exec() for query:\n" + query + "\n" + sqlQuery.lastError().text();
+    console.error(message);
     queryCallback(new Error(sqlQuery.lastError().text()), null);
     return;
   }
