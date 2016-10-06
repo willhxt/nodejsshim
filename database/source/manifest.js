@@ -8,7 +8,7 @@
     "prerequisite.sql",
 
     "package.sql",
-    "nodejsshim/schema/nodejsshim.sql",
+
     "nodejsshim/tables/node_modules.sql",
     "nodejsshim/functions/npm_install.sql",
 
