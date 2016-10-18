@@ -49,10 +49,6 @@ var WebSocketServer = function webSocketServerConstructor (options, callback) {
   this.options = Object.assign(this.options, options);
   this.options.allowedOrigins = Array.prototype.concat(["localhost"], (options.allowedOrigins ? options.allowedOrigins : []));
 
-  if (!options.port || options.port < 1 || options.port === "") {
-    throw new TypeError('`port` must be provided');
-  }
-
   var secureMode = options.secureMode ? QWebSocketServer.SecureMode : QWebSocketServer.NonSecureMode;
 
   this.QWebSocketServer = new QWebSocketServer(options.name, secureMode, mywindow);
@@ -89,7 +85,10 @@ var WebSocketServer = function webSocketServerConstructor (options, callback) {
    * Handle new WebSocket client connection error.
    */
   function _isAcceptError (socketError) {
-    console.error("sOnAcceptError: " + socketError);
+    var err = {
+      message: "sOnAcceptError: " + socketError
+    };
+    self.emit('error', err);
   }
 
   /**
@@ -129,21 +128,30 @@ var WebSocketServer = function webSocketServerConstructor (options, callback) {
    * Handle new WebSocket client PeerVerifyError.
    */
   function _isPeerVerifyError (error) {
-    console.error("sOnPeerVerifyError: " + error);
+    var err = {
+      message: "sOnPeerVerifyError: " + error
+    };
+    self.emit('error', err);
   }
 
   /**
    * Handle new WebSocket client ServerError.
    */
   function _isServerError (closeCode) {
-    console.error("sOnServerError: " + closeCode);
+    var err = {
+      message: "sOnServerError: " + closeCode
+    };
+    self.emit('error', err);
   }
 
   /**
    * Handle new WebSocket client SslErrors.
    */
   function _isSslErrors (errors) {
-    console.error("sOnSslErrors: " + errors);
+    var err = {
+      message: "sOnSslErrors: " + errors
+    };
+    self.emit('error', err);
   }
 
   this.QWebSocketServer["acceptError(QAbstractSocket::SocketError)"].connect(_isAcceptError);
@@ -156,7 +164,10 @@ var WebSocketServer = function webSocketServerConstructor (options, callback) {
   if (typeof callback === 'function') {
     this.once('listening', callback);
   }
-  this.listen(options.port, options.host, callback);
+
+  if (options.port && options.port > 0) {
+    this.listen(options.port, options.host, callback);
+  }
 };
 
 util.inherits(WebSocketServer, EventEmitter);
