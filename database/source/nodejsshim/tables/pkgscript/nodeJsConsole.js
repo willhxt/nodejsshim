@@ -45,7 +45,7 @@ function handleExampleListChange (index) {
 }
 
 /*
- * Some example code that users the Node.js Shim.
+ * Test http.get() Request.
  */
 function exampleHttpGet () {
   var http = require('http');
@@ -70,7 +70,7 @@ function exampleHttpGet () {
 }
 
 /*
- * Some example code that users the Node.js Shim.
+ * Test http.request().
  */
 function exampleHttpRequest () {
   var http = require('http');
@@ -97,7 +97,7 @@ function exampleHttpRequest () {
 }
 
 /*
- * Test http.Server
+ * Test http.createServer().
  */
 function exampleHttpServer () {
   var http = require('http');
@@ -180,7 +180,7 @@ function examplePromise () {
 }
 
 /*
- * Test QTcpServer
+ * Test net.createServer().
  */
 function exampleTcpServer () {
   var net = require('net');
@@ -221,7 +221,7 @@ function exampleTcpServer () {
 }
 
 /*
- * Test WebSocket Server
+ * Test WebSocketServer().
  */
 function exampleWebSocketServer(){
   var WebSocketServer = require("ws").Server;
@@ -286,7 +286,7 @@ function exampleWebSocketServer(){
 }
 
 /*
- * Test XT.dataSource.query
+ * Test XT.dataSource.query().
  */
 function exampleXTdataSourceQuery () {
   var sql = "SELECT cust_id FROM custinfo WHERE cust_number = $1;";
