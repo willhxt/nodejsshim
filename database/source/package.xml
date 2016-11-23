@@ -2,7 +2,7 @@
          name="nodejsshim"
          developer="xTuple ERP"
          descrip="xTuple ERP Node.js shims for the Qt Script Engine."
-         version="1.0.0-rc"
+         version="1.0.0"
          updater="2.4.0-beta">
   <pkgnotes>This package creates the required database tables and functions for xTuple Node.js shims. </pkgnotes>
 
