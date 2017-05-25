@@ -15,19 +15,21 @@ Qt object wrapped code to emulate NPM packages like `ws`.
 ## Installation
 This xTuple Extension Package can be installed with the xTuple Updater by
 installing the `nodejsshim.gz` file in the `packages` directory. It can also
-be installed by running:
+be installed in a Linux environment by running the following:
+
 ```
-cd path-to-web-enabled-install
-git clone git@github.com:xtuple/qt-script-node-js-shims.git
+cd /path/to/web/enabled/build/sources
+ls # should show xtuple
+git clone git@github.com:xtuple/nodejsshim.git
 cd xtuple
-./scripts/build_app.js -d database-name-here -e ../qt-script-node-js-shims
+scripts/build_app.js -d database-name-here -e ../nodejsshim
 
 ```
 
 ## Usage
-After installation, a new package, `nodejsshim`, will exist in your xTuple
-database. Some example usage tests are provided at:
-  * `System > Design > Node.js Shim > Examples...`
+After installation, an extension named `nodejsshim` will exist in your xTuple
+database. Some example usage tests are available in
+**System > Design > Node.js Shim > Examples...**
 Your user must have the `MaintainScripts` privilege to run them.
 
 To use the Node.js shim in other Qt Script code, just include this at the top
@@ -54,6 +56,6 @@ To build nodejsshim, you need Node.js 4.4.2 and Browserify installed.
 To update the version number of this extension you must edit the following files:
 
 * package.json
-* database/source/manifest.js
-* database/source/package.sql
-* database/source/package.xml
+* foundation-database/source/manifest.js
+* foundation-database/source/package.sql
+* foundation-database/source/package.xml
