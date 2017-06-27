@@ -10,10 +10,10 @@ PKG = $(shell awk '/name *=/ { split($$0, ary, "[\"= ]*");	\
 				      print ary[i + 1] ; exit;	\
 				    } } }' package.xml)
 
-EXCLUDE = --exclude Makefile --exclude .\*
+EXCLUDE = --exclude Makefile
 TAROPTS = -h
 
 all: FORCE
-	cd .. && tar czf ../packages/$(PKG)-$(VER).gz $(TAROPTS) $(EXCLUDE) source
+	cd .. && tar czf ./packages/$(PKG)-$(VER).gz $(TAROPTS) $(EXCLUDE) foundation-database
 
 FORCE:

@@ -56,6 +56,6 @@ To build nodejsshim, you need Node.js 4.4.2 and Browserify installed.
 To update the version number of this extension you must edit the following files:
 
 * package.json
-* foundation-database/source/manifest.js
-* foundation-database/source/package.sql
-* foundation-database/source/package.xml
+* foundation-database/manifest.js
+* foundation-database/package.sql
+* foundation-database/package.xml

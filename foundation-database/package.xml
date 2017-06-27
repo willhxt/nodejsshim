@@ -1,4 +1,4 @@
-<package id="source"
+<package id="foundation-database"
          name="nodejsshim"
          developer="xTuple ERP"
          descrip="xTuple ERP Node.js shims for the Qt Script Engine."

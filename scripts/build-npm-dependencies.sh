@@ -7,7 +7,7 @@
 # included out of the box.
 
 # Run browserify on all the npm dependencies in `../node_modules/` and export
-# the bundled package to the `../database/source/nodejsshim/node_modules/`
+# the bundled package to the `../foundation-database/nodejsshim/node_modules/`
 # directories. These bundles can then be inserted into the database and loaded with:
 #
 #   `var myPackage = require('package-name-here');`
@@ -26,7 +26,7 @@ build_bluebird () {
   echo "Building bluebird..."
   local PACKAGEPATH="bluebird"
   local PACKAGENAME="bluebird"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/node_modules/bluebird/dist/bluebird.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/bluebird/dist/bluebird.sql"
   local SCHEMANAME="nodejsshim"
   local VERSION="3.4.0"
   local URL="https://github.com/petkaantonov/bluebird"
@@ -38,7 +38,7 @@ build_json_mapper () {
   echo "Building json-mapper..."
   local PACKAGEPATH="json-mapper"
   local PACKAGENAME="json-mapper"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/node_modules/json-mapper/dist/json-mapper.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/json-mapper/dist/json-mapper.sql"
   local SCHEMANAME="nodejsshim"
   local VERSION="0.0.10"
   local URL="https://github.com/dregenor/jsonMapper"
@@ -53,7 +53,7 @@ build_lodash () {
   echo "Building lodash..."
   local PACKAGEPATH="lodash"
   local PACKAGENAME="lodash"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/node_modules/lodash/dist/lodash.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/lodash/dist/lodash.sql"
   local SCHEMANAME="nodejsshim"
   local VERSION="4.11.2"
   local URL="https://github.com/lodash/lodash"
@@ -65,7 +65,7 @@ build_sax () {
   echo "Building sax..."
   local PACKAGEPATH="sax"
   local PACKAGENAME="sax"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/node_modules/sax/dist/sax.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/sax/dist/sax.sql"
   local SCHEMANAME="nodejsshim"
   local VERSION="1.2.1"
   local URL="https://github.com/isaacs/sax-js"
@@ -77,7 +77,7 @@ build_xmlbuilder () {
   echo "Building xmlbuilder..."
   local PACKAGEPATH="xmlbuilder"
   local PACKAGENAME="xmlbuilder"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/node_modules/xmlbuilder/dist/xmlbuilder.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/xmlbuilder/dist/xmlbuilder.sql"
   local SCHEMANAME="nodejsshim"
   local VERSION="8.2.2"
   local URL="https://github.com/oozcitak/xmlbuilder-js"

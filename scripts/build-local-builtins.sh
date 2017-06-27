@@ -6,7 +6,7 @@
 # packages and refer to them as "external builtins". Others require Qt specific
 # code to work which is implemented here and referred to as "local builtins".
 
-# Run browserify on all the local builtins in `../database/source/nodejsshim/src/`
+# Run browserify on all the local builtins in `../foundation-database/nodejsshim/src/`
 # and export the bundled package to their respective `dist` directories. These
 # bundles can then be inserted into the database and loaded with:
 #
@@ -26,54 +26,54 @@ build_buffer_qt () {
   # Note: This is a wrapper around QByteArray. There is also a Buffer shim in
   # external builtins that work differently, but is slower.
   echo "Building Buffer-qt..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/buffer-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/buffer-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="buffer-qt"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/buffer-qtscript/dist/buffer.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/buffer-qtscript/dist/buffer.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_child_process () {
   echo "Building child_process..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/child_process-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/child_process-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="child_process"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/child_process-qtscript/dist/child_process.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/child_process-qtscript/dist/child_process.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_crypto () {
   echo "Building crypto..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/crypto-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/crypto-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="crypto"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/crypto-qtscript/dist/crypto.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/crypto-qtscript/dist/crypto.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_dns () {
   echo "Building dns..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/dns-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/dns-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="dns"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/dns-qtscript/dist/dns.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/dns-qtscript/dist/dns.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_fs () {
   echo "Building fs..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/fs-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/fs-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="fs"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/fs-qtscript/dist/fs.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/fs-qtscript/dist/fs.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_http () {
   echo "Building http..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/http-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/http-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="http"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/http-qtscript/dist/http.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/http-qtscript/dist/http.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
@@ -81,36 +81,36 @@ build_http () {
 # TODO: We just rename http to https for now.
 build_https () {
   echo "Building https..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/http-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/http-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="https"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/https-qtscript/dist/https.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/https-qtscript/dist/https.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_net () {
   echo "Building net..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/net-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/net-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="net"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/net-qtscript/dist/net.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/net-qtscript/dist/net.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_stream_transform () {
   echo "Building _stream_transform..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/_stream_transform-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/_stream_transform-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="_stream_transform"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/_stream_transform-qtscript/dist/_stream_transform.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/_stream_transform-qtscript/dist/_stream_transform.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
 
 build_timers () {
   echo "Building timers..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/timers-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/timers-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="timers"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/timers-qtscript/dist/timers.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/timers-qtscript/dist/timers.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
@@ -118,9 +118,9 @@ build_timers () {
 build_ws () {
   # Note: This is not a Node.js builtin, but a Qt emulation of the `ws` NPM package.
   echo "Building ws..."
-  local PACKAGEPATH="$DIR/../database/source/nodejsshim/src/ws-qtscript/lib/index.qtscript.js"
+  local PACKAGEPATH="$DIR/../foundation-database/nodejsshim/src/ws-qtscript/lib/index.qtscript.js"
   local PACKAGENAME="ws"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/src/ws-qtscript/dist/ws.qtscript.sql"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/src/ws-qtscript/dist/ws.qtscript.sql"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
 }
@@ -142,12 +142,12 @@ VERSION=$(awk '/version *=/ { split($$0, ary, "[\"= ]*");       \
                               for (i in ary) {                  \
                                 if (ary[i] == "version") {      \
                                   print ary[i + 1] ; exit;      \
-                                } } }' $DIR/../database/source/package.xml)
+                                } } }' $DIR/../foundation-database/package.xml)
 SCHEMANAME=$(awk '/name *=/ { split($$0, ary, "[\"= ]*");       \
                               for (i in ary) {                  \
                                 if (ary[i] == "name") {         \
                                   print ary[i + 1] ; exit;      \
-                                } } }' $DIR/../database/source/package.xml)
+                                } } }' $DIR/../foundation-database/package.xml)
 URL="https://github.com/xtuple/qt-script-node-js-shims"
 
 # Build all local builtins.

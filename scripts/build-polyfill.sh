@@ -2,7 +2,7 @@
 
 # Build the core-js javascript polyfill which adds ES5 bug fixes and ES5
 # features to Qt Script. All we do is copy the npm core-js package's build to
-# our local `../database/source/nodejsshim/tables/pkgscript/core-js` directory.
+# our local `../foundation-database/nodejsshim/tables/pkgscript/core-js` directory.
 # At some point, we might need a custom build of core-js, which is possible.
 #
 # The core-js javascript polyfill can then be loaded with:
@@ -17,7 +17,7 @@
 build_core_js () {
   echo "Building core-js..."
   local PACKAGEPATH="$DIR/../node_modules/core-js/client/shim.js"
-  local OUTPUTPATH="$DIR/../database/source/nodejsshim/tables/pkgscript/core-js.js"
+  local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/tables/pkgscript/core-js.js"
 
   cp $PACKAGEPATH $OUTPUTPATH
 }
