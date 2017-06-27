@@ -12,7 +12,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 # Build release package.
 echo "Building release package..."
-cd $DIR/../database/source && make
+cd $DIR/../foundation-database && make
 #tar czf $DIR/../packages/nodejsshim.gz -C "$DIR/../database/" source
 echo "Node.js Shim package available at:"
 echo "$DIR/../packages/nodejsshim.gz"

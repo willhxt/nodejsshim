@@ -14,6 +14,6 @@ EXCLUDE = --exclude Makefile --exclude .\*
 TAROPTS = -h
 
 all: FORCE
-	cd .. && tar czf ../packages/$(PKG)-$(VER).gz $(TAROPTS) $(EXCLUDE) source
+	tar czf ../packages/$(PKG)-$(VER).gz $(TAROPTS) $(EXCLUDE) .\*
 
 FORCE:
