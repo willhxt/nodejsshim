@@ -10,7 +10,7 @@ PKG = $(shell awk '/name *=/ { split($$0, ary, "[\"= ]*");	\
 				      print ary[i + 1] ; exit;	\
 				    } } }' package.xml)
 
-EXCLUDE = --exclude Makefile
+EXCLUDE = --exclude Makefile --exclude .\*
 TAROPTS = -h
 
 all: FORCE
