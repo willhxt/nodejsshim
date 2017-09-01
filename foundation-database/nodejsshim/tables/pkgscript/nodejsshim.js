@@ -212,7 +212,7 @@ XT.dataSource.query = function (query, queryOptions, queryCallback) {
   var sqlQuery = db ? new QSqlQuery(db) : new QSqlQuery();
 
   // Replace node-postgres/plv8 style `$n` placeholders with Qt `?` style.
-  if (placeholders.length > 0 && options.parameters.length > 0) {
+  if (placeholders && placeholders.length > 0 && options.parameters.length > 0) {
     if (placeholders.length !== options.parameters.length) {
       queryCallback(new Error("SQL query placeholder and parameter count must be equal."), null);
       return;
@@ -277,4 +277,15 @@ XT.dataSource.query = function (query, queryOptions, queryCallback) {
     db.close();
   }
   queryCallback(null, response);
+};
+
+/**
+ * Emulate XT.dataSource.getAdminCredentials().
+ *
+ * @return {Object} - An emply placeholder object.
+ */
+XT.dataSource.getAdminCredentials = function getAdminCredentials (org) {
+  // Qt Script's XT.dataSource.query() gets the database connection from the client.
+  // We do not need to return anything here other than an empty object.
+  return {};
 };
