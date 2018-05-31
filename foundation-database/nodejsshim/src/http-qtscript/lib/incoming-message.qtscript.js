@@ -61,6 +61,14 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
     var timer = setInterval(function () {
       if (!self.hasData && !self.isReading) {
         clearInterval(timer);
+
+        if (self._timer) {
+          self.setTimeout(0);
+        }
+        self.removeAllListeners('timeout');
+        self.QNetworkReply.deleteLater();
+        delete self.QNetworkReply;
+
         self.emit('close');
         self.emit('end');
       }
@@ -72,6 +80,15 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
     }
     self._idleTime = Date.now() + self._timeout;
     self.QtQAbstractSocketSocketError = code;
+
+    if (self._timer) {
+      self.setTimeout(0);
+    }
+    self.removeAllListeners('timeout');
+    self.QNetworkReply.deleteLater();
+    delete self.QNetworkReply;
+
+    self.emit('close');
   }
   function _readData () {
     var size = self.QNetworkReply.bytesAvailable();
