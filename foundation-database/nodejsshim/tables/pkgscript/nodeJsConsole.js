@@ -1,5 +1,5 @@
 /* This file is part of the Node.js shims extension package for xTuple ERP, and is
- * Copyright (c) 1999-2016 by OpenMFG LLC, d/b/a xTuple.
+ * Copyright (c) 1999-2018 by OpenMFG LLC, d/b/a xTuple.
  * It is licensed to you under the xTuple End-User License Agreement
  * ("the EULA"), the full text of which is available at www.xtuple.com/EULA
  * While the EULA gives you access to source code and encourages your
@@ -17,11 +17,12 @@ var _commandButton = mywindow.findChild("_commandButton");
 _exampleList.append(0, "Select and example...");
 _exampleList.append(1, "HTTP GET Request");
 _exampleList.append(2, "HTTP Request");
-_exampleList.append(3, "HTTP Server");
-_exampleList.append(4, "Promise");
-_exampleList.append(5, "TCP Server");
-_exampleList.append(6, "WebSocket Server");
-_exampleList.append(7, "XT.dataSource.Query()");
+_exampleList.append(3, "Loop of HTTP Requests");
+_exampleList.append(4, "HTTP Server");
+_exampleList.append(5, "Promise");
+_exampleList.append(6, "TCP Server");
+_exampleList.append(7, "WebSocket Server");
+_exampleList.append(8, "XT.dataSource.Query()");
 
 /*
  * Map the _exampleList selection to an example.
@@ -31,6 +32,7 @@ function handleExampleListChange (index) {
     function listPlaceholder(){},
     exampleHttpGet,
     exampleHttpRequest,
+    exampleLoopHttpRequest,
     exampleHttpServer,
     examplePromise,
     exampleTcpServer,
@@ -65,7 +67,7 @@ function exampleHttpGet () {
     res.on('end', function () {
       _consoleLog.plainText = _consoleLog.plainText + '\nNo more data in response.';
       _consoleLog.plainText = _consoleLog.plainText + '\nExecution time: ' + ((new Date().getTime()) - startQueryTimer);
-    })
+    });
   });
 }
 
@@ -90,10 +92,142 @@ function exampleHttpRequest () {
     res.on('end', function () {
       _consoleLog.plainText = _consoleLog.plainText + '\nNo more data in response.';
       _consoleLog.plainText = _consoleLog.plainText + '\nExecution time: ' + ((new Date().getTime()) - startQueryTimer);
-    })
+    });
   });
 
   req.end();
+}
+
+/*
+ * Test loop of http.request().
+ */
+function exampleLoopHttpRequest () {
+  var http = require('http');
+  var https = require('https');
+  var Promise = Promise || require('bluebird');
+
+  function timeoutHandler (timeout, req) {
+    return function() {
+      req._isAborted = true;
+      req.abort();
+      console.log('Request aborted due to timeout being reached (' + timeout + 'ms)');
+    };
+  }
+
+  function restApiRequest (
+    apiServer,
+    req
+  ) {
+    req.params = req.params || [];
+    req.headers = req.headers || {};
+
+    return new Promise(function (resolve, reject) {
+      var requestOptions = {
+        hostname: apiServer.hostname,
+        path: apiServer.path + req.path + req.params.join('/'),
+        port: apiServer.port,
+        method: req.method,
+        headers: req.headers,
+      };
+
+      var postBody = '';
+      if (req.method === 'POST') {
+        postBody = JSON.stringify(req.body);
+        requestOptions.headers['content-type'] = 'application/json';
+        requestOptions.headers['Content-Length'] = Buffer.byteLength(postBody,'utf8');
+      }
+
+      var server = (apiServer.protocol || 'https') === 'https' ? https : http;
+
+      var request = server.request(requestOptions);
+      request.setTimeout(120000, timeoutHandler(120000, request));
+      request.on('response', function (res) {
+        var data = '';
+
+        res.on('data', function (chunk) {
+          data = data + chunk;
+        });
+        res.on('end', function () {
+          var isJSON = res.headers['content-type']
+            ? res.headers['content-type'].indexOf('application/json') > -1 : false;
+
+          try {
+            res.body = isJSON ? JSON.parse(data) : data;
+          } catch (err) {
+            console.log('restApiRequest res.body error: ', data);
+            throw err;
+          }
+
+          resolve(res);
+        });
+        res.on('error', function (err) {
+          reject(err);
+        });
+      });
+      request.on('error', function (err) {
+        console.log('request error: ' + err);
+      });
+
+      if (req.method === 'POST') {
+        request.write(postBody);
+      }
+      request.end();
+    })
+    .caught(function (err) {
+      throw err;
+    });
+  }
+
+  var processedCount = 0;
+  var promiseQuque = [];
+  var data = {foo: "bar"};
+  var requestData = JSON.stringify({});
+  var testApiServer = {
+    hostname: 'www.example.com',
+    path: '/',
+    port: 443,
+    protocol: 'https'
+  };
+  var testHeaders = {};
+  var testReq = {
+    headers: {},
+    method: 'GET',
+    path: ''
+  };
+
+  for (var i = 0; i < 1200; i++) {
+    promiseQuque.push(function () {
+      return restApiRequest(testApiServer, testReq)
+        .then(function (response) {
+          processedCount++;
+          console.log('processedCount: ' + processedCount);
+          _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS MESSAGE: ' + response.statusMessage;
+          return;
+        })
+        .caught(function (err) {
+          console.log('err: ' + err);
+          throw err;
+        });
+    });
+  }
+
+  promiseQuque.push(function () {
+    return Promise.resolve()
+      .then(function () {
+        console.log('done!');
+      });
+  });
+
+  // Call the `promiseQuque` functions in the correct order synchronously.
+  var p = Promise.resolve();
+  promiseQuque.forEach(function (currentPromise) {
+    // Call the current Promise, `p`, and then set `p` to the next Promise
+    // to be called on the next loop.
+    p = p.then(currentPromise)
+      .caught(function (error) {
+        throw error;
+      });
+  });
 }
 
 /*
