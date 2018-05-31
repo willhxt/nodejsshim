@@ -55,7 +55,7 @@ build_lodash () {
   local PACKAGENAME="lodash"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/lodash/dist/lodash.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="4.11.2"
+  local VERSION="4.17.4"
   local URL="https://github.com/lodash/lodash"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
@@ -67,7 +67,7 @@ build_sax () {
   local PACKAGENAME="sax"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/node_modules/sax/dist/sax.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="1.2.1"
+  local VERSION="1.2.4"
   local URL="https://github.com/isaacs/sax-js"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"

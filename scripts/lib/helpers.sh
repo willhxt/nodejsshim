@@ -16,7 +16,7 @@ build_browserify_command () {
     local FLAGS=$7
   fi
 
-  local COMMAND="browserify $FLAGS -r $PACKAGEPATH:$PACKAGENAME"
+  local COMMAND="./node_modules/.bin/browserify $FLAGS -r $PACKAGEPATH:$PACKAGENAME"
   local BUNDLE=`$COMMAND`
   local SQL=`wrap_npm_install_sql "$SCHEMANAME" "$PACKAGENAME" "$VERSION" "$URL" "$BUNDLE"`
   echo "$SQL" > "$OUTPUTPATH"
