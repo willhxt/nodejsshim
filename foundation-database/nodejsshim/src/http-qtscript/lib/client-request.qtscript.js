@@ -22,7 +22,19 @@ function ClientRequest(options, cb) {
   this._timeout = 60 * 1000;
   this._idleTime = Date.now() + this._timeout;
 
-  this.QNetworkManager = new QNetworkAccessManager(mywindow);
+  if (!global.globalQNetworkAccessManager) {
+    // Qt docs recommend:
+    //  - "One QNetworkAccessManager instance should be enough for the whole Qt application."
+    //
+    // We set a global `QNetworkAccessManager` that will be reused by this
+    // instance of the `QtScriptEngine` for all network requests. This has better
+    // performance than creating and destroying a `QNetworkAccessManager` for
+    // each request. It also avoids hitting an error after 300 to 500 requests:
+    //  - `QThread::start: Failed to create thread (The access code is invalid.)`
+    global.globalQNetworkAccessManager = new QNetworkAccessManager(mywindow);
+  }
+
+  this.QNetworkManager = globalQNetworkAccessManager;
   this.QNetworkRequest = new QNetworkRequest();
 
   // TODO: Implement other methods.
@@ -97,6 +109,13 @@ function ClientRequest(options, cb) {
   this.response.once('socket', function (res) {
     self.emit('socket', res);
     res.emit((res.port === 80) ? 'connect' : 'secureConnect', res, res, res.headers);
+  });
+
+  this.response.once('close', function () {
+    if (self._timer) {
+      self.setTimeout(0);
+    }
+    self.removeAllListeners('timeout');
   });
 
   return this;

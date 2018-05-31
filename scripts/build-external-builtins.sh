@@ -28,7 +28,7 @@ build_assert () {
   local PACKAGENAME="assert"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/lib/assert/dist/assert.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="1.3.0"
+  local VERSION="1.4.1"
   local URL="https://github.com/defunctzombie/commonjs-assert"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
@@ -42,7 +42,7 @@ build_buffer () {
   local PACKAGENAME="buffer"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/lib/buffer/dist/buffer.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="4.6.0"
+  local VERSION="4.9.1"
   local URL="https://github.com/feross/buffer"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
@@ -68,7 +68,7 @@ build_events () {
   local PACKAGENAME="events"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/lib/events/dist/events.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="1.1.0"
+  local VERSION="1.1.1"
   local URL="https://github.com/Gozala/events"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
@@ -80,7 +80,7 @@ build_http_parser () {
   local PACKAGENAME="http-parser"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/lib/http-parser/dist/http-parser.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="0.4.2"
+  local VERSION="0.4.5"
   local URL="https://github.com/creationix/http-parser-js"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
@@ -104,7 +104,7 @@ build_process () {
   local PACKAGENAME="process"
   local OUTPUTPATH="$DIR/../foundation-database/nodejsshim/lib/process/dist/process.sql"
   local SCHEMANAME="nodejsshim"
-  local VERSION="0.11.2"
+  local VERSION="0.11.10"
   local URL="https://github.com/shtylman/node-process"
 
   build_browserify_command "$PACKAGEPATH" "$PACKAGENAME" "$OUTPUTPATH" "$SCHEMANAME" "$VERSION" "$URL" "--bare"
