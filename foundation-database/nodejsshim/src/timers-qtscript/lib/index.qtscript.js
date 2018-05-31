@@ -82,6 +82,7 @@ var timers = (function () {
       var timerId = timer.timerId();
       if (activeTimers[timerId]) {
         activeTimers[timerId].stop();
+        activeTimers[timerId].deleteLater();
         delete activeTimers[timerId];
       }
     }
