@@ -2,12 +2,12 @@
          name="nodejsshim"
          developer="xTuple ERP"
          descrip="xTuple ERP Node.js shims for the Qt Script Engine."
-         version="1.0.0"
+         version="1.0.1"
          updater="2.4.0-beta">
   <pkgnotes>This package creates the required database tables and functions for xTuple Node.js shims. </pkgnotes>
 
   <prerequisite type="license">
-    <message>This file is part of the xTuple Node.js Shims Package for xTuple ERP, and is Copyright (c) 1999-2017 by OpenMFG LLC, d/b/a xTuple.  It is licensed to you under the xTuple End-User License Agreement ("the EULA"), the full text of which is available at www.xtuple.com/EULA.  While the EULA gives you access to source code and encourages your involvement in the development process, this Package is not free software.  By using this software, you agree to be bound by the terms of the EULA.</message>
+    <message>This file is part of the xTuple Node.js Shims Package for xTuple ERP, and is Copyright (c) 1999-2018 by OpenMFG LLC, d/b/a xTuple.  It is licensed to you under the xTuple End-User License Agreement ("the EULA"), the full text of which is available at www.xtuple.com/EULA.  While the EULA gives you access to source code and encourages your involvement in the development process, this Package is not free software.  By using this software, you agree to be bound by the terms of the EULA.</message>
   </prerequisite>
 
   <prerequisite type="Query" name="Checking for db version">
