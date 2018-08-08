@@ -60,13 +60,13 @@ function exampleHttpGet () {
   startQueryTimer = new Date().getTime();
   var req = http.get(options, function (res) {
     res.on('data', function (chunk) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS: ' + res.statusCode;
-      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS MESSAGE: ' + res.statusMessage;
-      _consoleLog.plainText = _consoleLog.plainText + '\nBODY: ' + chunk;
+      _consoleLog.append(qsTr('STATUS: %1').arg(res.statusCode));
+      _consoleLog.append(qsTr('STATUS MESSAGE: %1').arg(res.statusMessage));
+      _consoleLog.append(qsTr('BODY: %1').arg(chunk));
     });
     res.on('end', function () {
-      _consoleLog.plainText = _consoleLog.plainText + '\nNo more data in response.';
-      _consoleLog.plainText = _consoleLog.plainText + '\nExecution time: ' + ((new Date().getTime()) - startQueryTimer);
+      _consoleLog.append(qsTr('No more data in response.'));
+      _consoleLog.append(qsTr('Execution time: %1').arg((new Date().getTime()) - startQueryTimer));
     });
   });
 }
@@ -85,13 +85,13 @@ function exampleHttpRequest () {
   startQueryTimer = new Date().getTime();
   var req = http.request(options, function (res) {
     res.on('data', function (chunk) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS: ' + res.statusCode;
-      _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS MESSAGE: ' + res.statusMessage;
-      _consoleLog.plainText = _consoleLog.plainText + '\nBODY: ' + chunk;
+      _consoleLog.append(qsTr('STATUS: %1').arg(res.statusCode));
+      _consoleLog.append(qsTr('STATUS MESSAGE: %1').arg(res.statusMessage));
+      _consoleLog.append(qsTr('BODY: %1').arg(chunk));
     });
     res.on('end', function () {
-      _consoleLog.plainText = _consoleLog.plainText + '\nNo more data in response.';
-      _consoleLog.plainText = _consoleLog.plainText + '\nExecution time: ' + ((new Date().getTime()) - startQueryTimer);
+      _consoleLog.append(qsTr('No more data in response.'));
+      _consoleLog.append(qsTr('Execution time: %1').arg((new Date().getTime()) - startQueryTimer));
     });
   });
 
@@ -201,7 +201,7 @@ function exampleLoopHttpRequest () {
         .then(function (response) {
           processedCount++;
           console.log('processedCount: ' + processedCount);
-          _consoleLog.plainText = _consoleLog.plainText + '\nSTATUS MESSAGE: ' + response.statusMessage;
+          _consoleLog.append(qsTr('STATUS MESSAGE: %1').arg(response.statusMessage));
           return;
         })
         .caught(function (err) {
@@ -220,6 +220,24 @@ function exampleLoopHttpRequest () {
 
   // Call the `promiseQuque` functions in the correct order synchronously.
   var p = Promise.resolve();
+
+  /*
+  // Async request loop. Send all at once.
+  p.then(function () {
+    var promises = [];
+
+    promiseQuque.forEach(function (currentPromise) {
+      promises.push(currentPromise());
+    });
+
+    return Promise.all(promises);
+  })
+  .caught(function (error) {
+    throw error;
+  });
+  */
+
+  // Sync request loop. Send one after another.
   promiseQuque.forEach(function (currentPromise) {
     // Call the current Promise, `p`, and then set `p` to the next Promise
     // to be called on the next loop.
@@ -241,7 +259,10 @@ function exampleHttpServer () {
     host: '127.0.0.1'
   };
   var server = http.createServer(function (req, res) {
-    _consoleLog.plainText = _consoleLog.plainText + '\n' + req.headers.host + ' - [' + (new Date().toISOString()) + '] "' + req.method + ' ' + req.url + '"';
+    _consoleLog.append(qsTr('%1 - [%2] %3 %4').arg(req.headers.host)
+                                              .arg(new Date().toISOString())
+                                              .arg(req.method)
+                                              .arg(req.url));
 
     if (req.url === '/') {
       var html = '<html><head><title>xTuple exampleHttpServer</title></head><body><h1>It Works!</h1></body></html>';
@@ -299,17 +320,17 @@ function examplePromise () {
   // You can also use `caught` when using the Bluebird library for Promise. e.g.
   //   `myPromise.then(...).caught(...);`
   doSomething().then(function (firstResult) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nFirst result: ' + firstResult;
+    _consoleLog.append(qsTr('First result: %1').arg(firstResult));
     return doSomethingElse(firstResult);
   }).then(function (secondResult) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nSecond result: ' + secondResult;
+    _consoleLog.append(qsTr('nSecond result: %1').arg(secondResult));
     return secondResult;
   }).then(function (thirdResult) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nThird result passed message: ' + thirdResult;
+    _consoleLog.append(qsTr('Third result passed message: %1').arg(thirdResult));
     var message = "Did something that errors. message = " + thirdResult;
     throw new Error(message);
   })["catch"](function (err) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + err.message;
+    _consoleLog.append(qsTr('Query Error: %1').arg(err.message));
   });
 }
 
@@ -324,32 +345,33 @@ function exampleTcpServer () {
     host: '127.0.0.1'
   };
   var server = net.createServer(function (clientSocket) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server received new TCP Socket Client connection.';
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server writing "Hello World!" to TCP Socket Client';
+    _consoleLog.append(qsTr('TCP Socket Server received new TCP Socket Client connection.'));
+    _consoleLog.append(qsTr('TCP Socket Server writing "Hello World!" to TCP Socket Client.'));
     clientSocket.end("Hello World!");
   });
 
   server.listen(options, function () {
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Server listening on ' + options.host + '::' + options.port;
+    _consoleLog.append(qsTr('TCP Socket Server listening on %1::%2').arg(options.host)
+                                                                    .arg(options.port));
 
     var client = new net.Socket();
 
-    _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connecting to TCP Socket Server.';
+    _consoleLog.append(qsTr('TCP Socket Client connecting to TCP Socket Server.'));
     client.connect({
       host: options.host,
       port: options.port
     }, function connectListener() {
-      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client connected.';
+      _consoleLog.append(qsTr('TCP Socket Client connected.'));
     });
 
     client.on('data', function(data) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client received data: ' + data;
+      _consoleLog.append(qsTr('TCP Socket Client received data: %1').arg(data));
       // Kill client after server's response.
       client.destroy();
     });
 
     client.on('close', function() {
-      _consoleLog.plainText = _consoleLog.plainText + '\nTCP Socket Client closed connection.';
+      _consoleLog.append(qsTr('TCP Socket Client closed connection.'));
     });
   });
 }
@@ -367,32 +389,33 @@ function exampleWebSocketServer(){
   var wsServer = new WebSocketServer(options);
 
   wsServer.on('connection', function handleWSClientConnection (socket) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket received client connection. Sending message to client: ping';
+    _consoleLog.append(qsTr('WebSocket Server socket received client connection. Sending message to client: ping'));
     socket.send('ping', function handelSocketSendError(error) {
       if (error) {
-        _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket.send callback error:' + JSON.stringify(error);
+        _consoleLog.append(qsTr('WebSocket Server socket.send callback error: %1').arg(JSON.stringify(error)));
       }
     });
 
     socket.on('error', function (error) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket error: ' + JSON.stringify(error);
+      _consoleLog.append(qsTr('WebSocket Server socket error: %1').arg(JSON.stringify(error)));
     });
 
     socket.on('message', function handleSocketMessage(message) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server socket received message: ' + message;
+      _consoleLog.append(qsTr('WebSocket Server socket received message: %1').arg(message));
     });
 
     socket.on('close', function HandelSocketClose() {
-      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server Client closed WebSocket connection.';
+      _consoleLog.append(qsTr('WebSocket Server Client closed WebSocket connection.'));
     });
   });
 
   wsServer.on('error', function handleWSServerError (error) {
-    _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server Error: ' + JSON.stringify(error);
+    _consoleLog.append(qsTr('WebSocket Server Error: %1').arg(JSON.stringify(error)));
   });
 
   wsServer.on('listening', function handleWSServerListening () {
-    _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Server listening on ws://' + options.host + '::' + options.port;
+    _consoleLog.append(qsTr('WebSocket Server listening on ws://%1::%2').arg(options.host)
+                                                                        .arg(options.port));
     _commandLine.setEnabled(true);
     _commandButton.setEnabled(true);
 
@@ -409,12 +432,12 @@ function exampleWebSocketServer(){
     _commandButton.clicked.connect(wsClientSendMessage);
 
     wsClient.on('open', function open() {
-      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Client connected to server. Sending message to server: pong';
+      _consoleLog.append(qsTr('WebSocket Client connected to server. Sending message to server: pong'));
       wsClient.send('pong');
     });
 
     wsClient.on('message', function(data, flags) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nWebSocket Client received message: ' + data;
+      _consoleLog.append(qsTr('WebSocket Client received message: %1').arg(data));
     });
   });
 }
@@ -430,9 +453,9 @@ function exampleXTdataSourceQuery () {
 
   function callback (queryError, result) {
     if (queryError) {
-      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Error: ' + queryError.message;
+      _consoleLog.append(qsTr('Query Error: %1').arg(queryError.message));
     } else {
-      _consoleLog.plainText = _consoleLog.plainText + '\nQuery Result: ' + JSON.stringify(result);
+      _consoleLog.append(qsTr('Query Result: %1').arg(JSON.stringify(result)));
     }
   }
 

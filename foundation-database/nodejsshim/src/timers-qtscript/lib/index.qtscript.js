@@ -20,7 +20,7 @@ var timers = (function () {
   var activeTimers = {};
 
   function _handle (cb, ms, args, singleShot) {
-    var timer = new QTimer();
+    var timer = new QTimer(mywindow);
     var timerId = timer.timerId();
 
     timer.interval = ms; // Set the time in milliseconds.
@@ -83,7 +83,6 @@ var timers = (function () {
       if (activeTimers[timerId]) {
         activeTimers[timerId].stop();
         activeTimers[timerId].deleteLater();
-        delete activeTimers[timerId];
       }
     }
   }

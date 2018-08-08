@@ -50,10 +50,7 @@ to be bound by its terms.</comment>
       </layout>
      </item>
      <item>
-      <widget class="QPlainTextEdit" name="_consoleLog">
-       <property name="focusPolicy">
-        <enum>Qt::NoFocus</enum>
-       </property>
+      <widget class="QTextEdit" name="_consoleLog">
        <property name="readOnly">
         <bool>true</bool>
        </property>
