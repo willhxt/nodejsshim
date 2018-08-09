@@ -25,7 +25,7 @@ function ClientRequest(options, cb) {
   if (mainwindow.qtVersion() === '5.5.1' && mainwindow.getWindowSystem() === mainwindow.MAC) {
     this.QNetworkManager = new QNetworkAccessManager(mywindow);
   } else {
-    if (!global.globalQNetworkAccessManager) {
+    if (global && !global.globalQNetworkAccessManager) {
       // Qt docs recommend:
       //  - "One QNetworkAccessManager instance should be enough for the whole Qt application."
       //
@@ -122,7 +122,7 @@ function ClientRequest(options, cb) {
     }
     self.removeAllListeners('timeout');
 
-    if (!global.globalQNetworkAccessManager) {
+    if (global && !global.globalQNetworkAccessManager) {
       self.QNetworkManager.deleteLater();
     }
   });
