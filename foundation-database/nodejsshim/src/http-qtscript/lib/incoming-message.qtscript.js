@@ -16,6 +16,8 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
 
   this.complete = false;
   this.hasData = false;
+  this.receivedData = false;
+  this.setMetaData = false;
   this.isReading = false;
   this._encoding = 'utf8';
   this.readable = true;
@@ -59,7 +61,7 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
     // Sometimes `QNetworkReply` emits `finished()` before `readyRead()`, so we
     // use a setInterval loop to only emit `close` and `end` when we're really done.
     var timer = setInterval(function () {
-      if (!self.hasData && !self.isReading) {
+      if (!self.hasData && !self.isReading && self.receivedData && self.setMetaData) {
         clearInterval(timer);
 
         if (self._timer) {
@@ -67,7 +69,6 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
         }
         self.removeAllListeners('timeout');
         self.QNetworkReply.deleteLater();
-        delete self.QNetworkReply;
 
         self.emit('close');
         self.emit('end');
@@ -86,7 +87,6 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
     }
     self.removeAllListeners('timeout');
     self.QNetworkReply.deleteLater();
-    delete self.QNetworkReply;
 
     self.emit('close');
   }
@@ -104,6 +104,8 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
       self.isReading = false;
       self.hasData = false;
     }
+
+    self.receivedData = true;
   }
   function _isReadyRead () {
     if (!self.isReading) {
@@ -123,6 +125,8 @@ function ClientIncomingMessage(requestHandler, qNetworkRequest) {
                    );
     self.statusCode = self.QNetworkReply.attribute(QNetworkRequest.HttpStatusCodeAttribute);
     self.statusMessage = self.QNetworkReply.attribute(QNetworkRequest.HttpReasonPhraseAttribute);
+
+    self.setMetaData = true;
   }
   function _isBytesWritten(bytes) {
     self._idleTime = Date.now() + self._timeout;

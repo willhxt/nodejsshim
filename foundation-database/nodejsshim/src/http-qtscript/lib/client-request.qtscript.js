@@ -22,19 +22,25 @@ function ClientRequest(options, cb) {
   this._timeout = 60 * 1000;
   this._idleTime = Date.now() + this._timeout;
 
-  if (!global.globalQNetworkAccessManager) {
-    // Qt docs recommend:
-    //  - "One QNetworkAccessManager instance should be enough for the whole Qt application."
-    //
-    // We set a global `QNetworkAccessManager` that will be reused by this
-    // instance of the `QtScriptEngine` for all network requests. This has better
-    // performance than creating and destroying a `QNetworkAccessManager` for
-    // each request. It also avoids hitting an error after 300 to 500 requests:
-    //  - `QThread::start: Failed to create thread (The access code is invalid.)`
-    global.globalQNetworkAccessManager = new QNetworkAccessManager(mywindow);
+  if (! global || (mainwindow.qtVersion() === '5.5.1' &&
+                   mainwindow.getWindowSystem() === mainwindow.MAC)) {
+    this.QNetworkManager = new QNetworkAccessManager(mywindow);
+  } else {
+    if (! global.globalQNetworkAccessManager) {
+      // Qt docs recommend:
+      //  - "One QNetworkAccessManager instance should be enough for the whole Qt application."
+      //
+      // We set a global `QNetworkAccessManager` that will be reused by this
+      // instance of the `QtScriptEngine` for all network requests. This has better
+      // performance than creating and destroying a `QNetworkAccessManager` for
+      // each request. It also avoids hitting an error after 300 to 500 requests:
+      //  - `QThread::start: Failed to create thread (The access code is invalid.)`
+      global.globalQNetworkAccessManager = new QNetworkAccessManager(mywindow);
+    }
+
+    this.QNetworkManager = globalQNetworkAccessManager;
   }
 
-  this.QNetworkManager = globalQNetworkAccessManager;
   this.QNetworkRequest = new QNetworkRequest();
 
   // TODO: Implement other methods.
@@ -80,7 +86,7 @@ function ClientRequest(options, cb) {
   this.QNetworkRequest.setUrl(QUrl(this.uri));
 
   if (options.headers) {
-    for (header in options.headers) {
+    for (var header in options.headers) {
       if (options.headers[header]) {
         self.QNetworkRequest.setRawHeader(QByteArray(header), QByteArray(options.headers[header]));
         self.headers[header] = options.headers[header];
@@ -116,6 +122,10 @@ function ClientRequest(options, cb) {
       self.setTimeout(0);
     }
     self.removeAllListeners('timeout');
+
+    if (! global || ! global.globalQNetworkAccessManager) {
+      self.QNetworkManager.deleteLater();
+    }
   });
 
   return this;
