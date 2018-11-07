@@ -1,5 +1,5 @@
 /* This file is part of the Node.js shims extension package for xTuple ERP, and is
- * Copyright (c) 1999-2016 by OpenMFG LLC, d/b/a xTuple.
+ * Copyright (c) 1999-2018 by OpenMFG LLC, d/b/a xTuple.
  * It is licensed to you under the xTuple End-User License Agreement
  * ("the EULA"), the full text of which is available at www.xtuple.com/EULA
  * While the EULA gives you access to source code and encourages your
