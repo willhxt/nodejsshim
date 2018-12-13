@@ -12,11 +12,11 @@ INSERT INTO pkghead (
 SELECT
   'nodejsshim',
   'xTuple ERP Node.js shims',
-  '1.0.2',
+  '1.0.3',
   'xTuple'
 WHERE NOT EXISTS (SELECT 1 FROM pkghead WHERE pkghead_name = 'nodejsshim');
 
 UPDATE pkghead SET pkghead_descrip = 'xTuple ERP Node.js shims',
-                   pkghead_version = '1.0.2',
+                   pkghead_version = '1.0.3',
                    pkghead_developer = 'xTuple'
  WHERE pkghead_name = 'nodejsshim';
